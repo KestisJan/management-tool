@@ -14,9 +14,10 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), 
             [
-                'name' => 'required',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|confirmed|min:8',
+                'name' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8',
             ]);
 
         if($validator->fails()) {
@@ -25,6 +26,7 @@ class AuthController extends Controller
 
         $user = new User;
         $user->name = $request->name;
+        $user->lastname = $request->lastname;
         $user->email = $request->email;
         $user->password = bcrypt(request()->password);
         $user->save();
@@ -34,7 +36,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToekn($token);
+        return $this->respondWithToken($token);
     }
 
     public function login(Request $request)
@@ -70,7 +72,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => auth('api')->user()
         ]);
     }
 }

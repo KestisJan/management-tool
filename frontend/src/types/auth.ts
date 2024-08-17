@@ -11,9 +11,10 @@ export type RegisterRequest = {
 
 
 export interface AuthResponse {
-    user?: User;
-    token: string;
-    refreshToken?: string;
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+    user: User; 
     error?: string;
     message?: string;
 }
