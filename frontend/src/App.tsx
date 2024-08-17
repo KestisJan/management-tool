@@ -6,9 +6,7 @@ import { NavBar } from './components';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
         <NavBar/>
-      </header>
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/login' element={<Login />}/>
