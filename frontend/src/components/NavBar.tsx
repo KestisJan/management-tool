@@ -11,7 +11,6 @@ const Navbar: React.FC = () => {
           backgroundColor: '#1D4ED8', 
           boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', 
           borderBottom: '1px solid #1E40AF', 
-          borderRadius: '0 0 8px 8px'  
         }}
       >
         <Toolbar className="flex justify-between items-center py-3 px-6">
