@@ -1,6 +1,6 @@
 import React, { useState} from "react";
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
-import { Auth } from "../services/auth.services";
+import { Auth } from "../../services/auth.services";
 
 const RegisterForm: React.FC = () => {
     
@@ -26,7 +26,6 @@ const RegisterForm: React.FC = () => {
         setError(null);
 
         if (formData.password !== formData.confirmPassword) {
-            console.log(formData.password, formData.confirmPassword)
             setError('Passwords do not match.');
             setLoading(false);
             return;
@@ -109,6 +108,7 @@ const RegisterForm: React.FC = () => {
                         fullWidth
                         id="password"
                         label="Password"
+                        type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -121,6 +121,7 @@ const RegisterForm: React.FC = () => {
                         id="confirmPassword"
                         label="Password Confirmation"
                         name="confirmPassword"
+                        type="password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         sx={{ mb: 2 }}
@@ -135,7 +136,7 @@ const RegisterForm: React.FC = () => {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 2, p: 2 }}
                         className="bg-blue-600 hover:bg-blue-700"
                         disabled={loading}
                     >

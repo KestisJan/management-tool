@@ -9,6 +9,11 @@ export type RegisterRequest = {
     confirmPassword: string;
 };
 
+export type LoginRequest = {
+    email: string;
+    password: string;
+};
+
 
 export interface AuthResponse {
     access_token: string;
@@ -17,7 +22,7 @@ export interface AuthResponse {
     user: User; 
     error?: string;
     message?: string;
-}
+};
 
 
 
