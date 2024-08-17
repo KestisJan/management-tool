@@ -2,11 +2,15 @@ import React from 'react';
 import { RegisterForm } from '../components';
 import { Box } from '@mui/material';
 
-const Register: React.FC = () => {
+const Signup: React.FC = () => {
     return (
         <Box
             className="
-                bg-gray-100 min-h-screen flex items-center
+                flex
+                items-center
+                mt-auto mb-auto
+                py-12
+                h-full
             "
             >
                 <RegisterForm />
@@ -15,4 +19,4 @@ const Register: React.FC = () => {
 };
 
 
-export default Register;
+export default Signup;

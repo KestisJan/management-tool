@@ -3,31 +3,51 @@ import { Box, TextField, Button, Typography, Container } from '@mui/material';
 
 
 const RegisterForm: React.FC = () => {
+    
     return (
         <Container component="main" maxWidth="xl" sx={{width: 'auto'}}>
             <Box 
                 className="
                     flex flex-col items-center
-                    p-6
+                    p-10
                     w-full
                     h-auto
-                    mb-20
+                    mb-15
                     rounded-lg
-                    bg-gray-100
+                    bg-gray-50
                     shadow-md
                     border border-gray-300
                     overflow-auto
-                    max-w-[500px]
+                    max-w-[700px]
                 "
             >
                 <Typography component="h1" variant="h5" className="text-blue-900 font-bold">
-                    Register
+                    Registration
                 </Typography>
                 <Box
                     component="form"
                     sx={{ mt: 1}}
                     className="w-full"
-                >
+                >   <Box className="flex justify-between space-x-4">
+                        <TextField 
+                            margin="normal"
+                            required
+                            id="name"
+                            label="First Name"
+                            name="name"
+                            sx={{ mb: 2, width: '50%' }}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="lastname"
+                            label="Last Name"
+                            name="lastname"
+                            sx={{ mb: 2, width: '50%' }}
+                        />
+                    </Box>
+
                     <TextField
                         margin="normal"
                         required
