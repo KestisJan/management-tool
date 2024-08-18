@@ -52,7 +52,7 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
     
-            return $this->respondWithToken($token);
+            return $this->respondWithToken($token, 201);
 
         } catch (\Exception $e) {
             Log::error('Registration failed: ' . $e->getMessage());
@@ -73,14 +73,14 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(auth('api')->user());
+        return response()->json(auth('api')->user(), 200);
     }
 
     public function logout()
     {
         auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
 
     public function refresh()
@@ -88,13 +88,13 @@ class AuthController extends Controller
         return $this->respondWithToken(JWTAuth::refresh());
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $statusCode = 200)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60,
             'user' => auth('api')->user()
-        ]);
+        ], $statusCode);
     }
 }
