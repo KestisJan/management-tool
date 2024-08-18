@@ -41,8 +41,6 @@ class AuthController extends Controller
                 'password' => $password
             ]);
     
-            Log::info('Created user: ', $user->toArray());
-
             UserProfile::create([
                 'user_id' => $user->id,
                 'first_name' => $data['first_name'],
