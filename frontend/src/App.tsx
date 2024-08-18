@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Home, Signup, Login, NotFound } from './pages';
+import { Home, Signup, Login, NotFound, UserProfile } from './pages';
 import { NavBar } from './components';
 
 function App() {
@@ -9,9 +9,10 @@ function App() {
         <NavBar/>
         <Routes>
           <Route path='/' element={<Home />}/>
-          <Route path='/login' element={<Login />}/>
-          <Route path='/signup' element={<Signup />}/>
-          <Route path='*' element={<NotFound />}/>
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/profile' element={<UserProfile />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
     </div>
   );
