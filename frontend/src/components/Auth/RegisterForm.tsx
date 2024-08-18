@@ -5,8 +5,8 @@ import { Auth } from "../../services/auth.services";
 const RegisterForm: React.FC = () => {
     
     const [formData, setFormData] = useState({
-        name: '',
-        lastname: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -71,10 +71,10 @@ const RegisterForm: React.FC = () => {
                         <TextField 
                             margin="normal"
                             required
-                            id="name"
+                            id="first_name"
                             label="First Name"
-                            name="name"
-                            value={formData.name}
+                            name="first_name"
+                            value={formData.first_name}
                             onChange={handleChange}
                             sx={{ mb: 2, width: '50%' }}
                         />
@@ -82,11 +82,11 @@ const RegisterForm: React.FC = () => {
                             margin="normal"
                             required
                             fullWidth
-                            id="lastname"
-                            value={formData.lastname}
+                            id="last_name"
+                            value={formData.last_name}
                             onChange={handleChange}
                             label="Last Name"
-                            name="lastname"
+                            name="last_name"
                             sx={{ mb: 2, width: '50%' }}
                         />
                     </Box>

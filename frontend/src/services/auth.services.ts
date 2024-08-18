@@ -13,7 +13,7 @@ export class Auth {
                 throw Error(`Registration failed with status code: ${response.status}`);
             }
 
-            const { access_token, expires_in, token_type, user } = response.data;
+            const { access_token, user } = response.data;
             if (!access_token) {
                 console.error('Failed to register. No JWT token received.');
                 throw Error('Failed to register. No JWT token received.');
@@ -43,7 +43,7 @@ export class Auth {
                 throw Error(`Login failed with status code: ${response.status}`);
             }
 
-            const { access_token, expires_in, token_type, user} = response.data;
+            const { access_token, user} = response.data;
 
             if (!access_token) {
                 console.error('Failed to log in. No JWT token received.');
