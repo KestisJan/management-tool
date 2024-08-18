@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
             <Button 
               color="inherit" 
               component={Link} 
-              to="/register" 
+              to="/signup" 
               sx={{ 
                 color: '#F1F5F9',  
                 borderRadius: '8px', 
@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                 }
               }}
             >
-              Register
+              SignUp
             </Button>
           </div>
         </Toolbar>

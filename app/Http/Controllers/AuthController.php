@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log; 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 
@@ -14,27 +16,48 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), 
             [
-                'name' => 'required',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|confirmed|min:8',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8',
             ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt(request()->password);
-        $user->save();
+        $data = $request->only([
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+        ]);
 
-        $credentials = ['email' => $request->email, 'password' => $request->password];
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $password = bcrypt($data['password']);
+
+        try {
+            $user = User::create([
+                'email' => $data['email'],
+                'password' => $password
+            ]);
+    
+            UserProfile::create([
+                'user_id' => $user->id,
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+            ]);
+    
+            $credentials = $request->only('email', 'password');
+            if (!$token = auth('api')->attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+    
+            return $this->respondWithToken($token);
+
+        } catch (\Exception $e) {
+            Log::error('Registration failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
-
-        return $this->respondWithToekn($token);
     }
 
     public function login(Request $request)
@@ -70,7 +93,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => auth('api')->user()
         ]);
     }
 }
