@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, TextField, Button, Typography, Container, Avatar, IconButton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
+import { RootState, AppDispatch } from "../../store/store";
+import { fetchUserProfile, updateUserProfile } from "../../features/userProfile/userProfileSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { UserProfile } from "../../interfaces/User";
 
 const UserProfileComponent: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const profile = useSelector((state: RootState) => state.userProfile.profile);
+    const status = useSelector((state: RootState) => state.userProfile.status);
+    const error = useSelector((state: RootState) => state.userProfile.error);
+
     const [avatar, setAvatar] = useState<File | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+    useEffect(() => {
+        dispatch(fetchUserProfile());
+    }, [dispatch]);
+
+    const handleUpdate = async (updatedProfile: UserProfile) => {
+        await dispatch(updateUserProfile(updatedProfile));
+    }
 
     const navigate = useNavigate();
 

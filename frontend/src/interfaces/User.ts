@@ -8,3 +8,9 @@ export interface User {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface UserProfile extends User {
+    phone: string;
+    city: string;
+    address: string;
+}
