@@ -7,8 +7,9 @@ export class Auth {
     public async register(userData: RegisterRequest): Promise<AuthResponse> {
         try {
             const response = await api.post<AuthResponse>('/auth/register', userData, headerAPI);
+            console.log(response);
 
-            if (response.status !== 200) {
+            if (response.status !== 201) {
                 console.error(`Registration failed with status code: ${response.status}`);
                 throw Error(`Registration failed with status code: ${response.status}`);
             }

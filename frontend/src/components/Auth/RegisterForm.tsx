@@ -1,24 +1,34 @@
-import React, { useState} from "react";
-import { Box, TextField, Button, Typography, Container } from '@mui/material';
-import { Auth } from "../../services/auth.services";
+import React, { useState } from 'react';
+import { Box, TextField, Button, Typography, Container, MenuItem, Select, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
+import countryList from '../../data/country-list.json';
+import { Auth } from '../../services/auth.services';
 
 const RegisterForm: React.FC = () => {
-    
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        phone: '',
+        address: '',
+        city: '',
+        country: '',
+        date_of_birth: ''
     });
 
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const handleSelectChange = (e: SelectChangeEvent<string>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,9 +41,12 @@ const RegisterForm: React.FC = () => {
             return;
         }
 
+        const submitData = { ...formData };
+
         try {
             const auth = new Auth();
-            const response = await auth.register(formData);
+            const response = await auth.register(submitData)
+
         } catch (err: any) {
             console.error('Registration failed: ', err);
             setError('Registration failed. Please try again.');
@@ -43,7 +56,7 @@ const RegisterForm: React.FC = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xl" sx={{width: 'auto'}}>
+        <Container component="main" maxWidth="xl" sx={{ width: 'auto' }}>
             <Box 
                 className="
                     flex flex-col items-center
@@ -64,10 +77,11 @@ const RegisterForm: React.FC = () => {
                 </Typography>
                 <Box
                     component="form"
-                    sx={{ mt: 1}}
+                    sx={{ mt: 1 }}
                     onSubmit={handleSubmit}
                     className="w-full"
-                >   <Box className="flex justify-between space-x-4">
+                >
+                    <Box className="flex justify-between space-x-4">
                         <TextField 
                             margin="normal"
                             required
@@ -102,6 +116,75 @@ const RegisterForm: React.FC = () => {
                         name="email"
                         sx={{ mb: 2 }}
                     />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="date_of_birth"
+                        label="Date of Birth"
+                        name="date_of_birth"
+                        type="date"
+                        value={formData.date_of_birth}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        sx={{ mb: 2 }}
+                    />
+                    <Box className="flex space-x-4">
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="phone"
+                            label="Phone"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="address"
+                            label="Address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            sx={{ mb: 2 }}
+                        />
+                    </Box>
+                    <Box className="flex space-x-4">
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="city"
+                            label="City"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleChange}
+                            sx={{ mb: 2, width: '48%' }}
+                        />
+                        <FormControl fullWidth margin="normal" required>
+                            <InputLabel id="country-label">Country</InputLabel>
+                            <Select
+                                labelId="country-label"
+                                id="country"
+                                name="country"
+                                value={formData.country}
+                                onChange={handleSelectChange}
+                                sx={{ mb: 2, width: '48%', '& .MuiFormLabel-root': { color: 'blue'}}}
+                            >
+                                {countryList.map((country) => (
+                                    <MenuItem key={country.code} value={country.code}>
+                                        {country.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
                     <TextField
                         margin="normal"
                         required
@@ -145,7 +228,7 @@ const RegisterForm: React.FC = () => {
                 </Box>
             </Box>
         </Container>
-    )
-}
+    );
+};
 
-export default RegisterForm
+export default RegisterForm;

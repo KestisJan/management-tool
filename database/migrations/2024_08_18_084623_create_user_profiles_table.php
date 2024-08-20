@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('profile_picture')->nullable();
+            $table->string('phone');
+            $table->string('address');
+            $table->string('city');
+            $table->string('country');
+            $table->date('date_of_birth');
             $table->timestamps();
         });
     }

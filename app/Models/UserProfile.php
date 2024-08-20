@@ -18,6 +18,11 @@ class UserProfile extends Model
         'first_name',
         'last_name',
         'profile_picture',
+        'phone',
+        'address',
+        'city',
+        'country',
+        'date_of_birth'
     ];
 
     public function user(): BelongsTo

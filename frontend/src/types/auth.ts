@@ -7,6 +7,11 @@ export type RegisterRequest = {
     email: string;
     password: string;
     confirmPassword: string;
+    phone: string;
+    address: string;
+    city: string;
+    country: string;
+    date_of_birth: string;
     profile_picture?: string;
 };
 

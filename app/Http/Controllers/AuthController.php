@@ -20,18 +20,19 @@ class AuthController extends Controller
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8',
+                'phone' => 'required|string|max:20',
+                'address' => 'required|string|max:255',
+                'city' => 'required|string|max:100',
+                'country' => 'required|string|max:100',
+                'date_of_birth' => 'required|date_format:Y-m-d',
+
             ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $data = $request->only([
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-        ]);
+        $data = $validator->validated();
 
         $password = bcrypt($data['password']);
 
@@ -45,6 +46,11 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'city' => $data['city'],
+                'country' => $data['country'],
+                'date_of_birth' => $data['date_of_birth'],
             ]);
     
             $credentials = $request->only('email', 'password');
