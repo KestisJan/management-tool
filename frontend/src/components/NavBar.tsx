@@ -1,8 +1,18 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/store';
+import { selectIsAuthenticated, logout } from '../features/auth/authSlice';
 
 const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const isAuthenticated = useSelector(( state: RootState) => selectIsAuthenticated(state));
+  const handleLogout = () => {
+    dispatch(logout())
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar 
@@ -28,45 +38,67 @@ const Navbar: React.FC = () => {
             MyApp
           </Typography>
           <div className="flex gap-4">
-            <Button 
-              color="inherit" 
-              component={Link} 
-              to="/login" 
-              sx={{ 
-                color: '#F1F5F9',
-                borderRadius: '8px', 
-                px: 2,
-                py: 1,
-                '&:hover': {
-                  backgroundColor: '#3B82F6', 
-                }
-              }}
-            >
-              Login
-            </Button>
-            <Button 
-              color="inherit" 
-              component={Link} 
-              to="/signup" 
-              sx={{ 
-                color: '#F1F5F9',  
-                borderRadius: '8px', 
-                px: 2,
-                py: 1,
-                '&:hover': {
-                  backgroundColor: '#3B82F6', 
-                }
-              }}
-            >
-              SignUp
-            </Button>
-            <Button
-              color='inherit'
-              component={Link}
-              to="/profile"
-            >
-              Profile
-            </Button>
+            {!isAuthenticated ? (
+              <>
+                <Button 
+                  color="inherit" 
+                  component={Link} 
+                  to="/login" 
+                  sx={{ 
+                    color: '#F1F5F9',
+                    borderRadius: '8px', 
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                      backgroundColor: '#3B82F6', 
+                    }
+                  }}
+                >
+                  Login
+                </Button>
+                <Button 
+                  color="inherit" 
+                  component={Link} 
+                  to="/signup" 
+                  sx={{ 
+                    color: '#F1F5F9',  
+                    borderRadius: '8px', 
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                      backgroundColor: '#3B82F6', 
+                    }
+                  }}
+                >
+                  SignUp
+                </Button>
+              </>
+            ) : (
+              <>
+              <Button
+                color='inherit'
+                component={Link}
+                to={`/profile/${userId}`}
+              >
+                Profile
+              </Button>
+              <Button
+                color='inherit'
+                onClick={handleLogout}
+                sx={{
+                  color: '#F1F5F9',
+                  borderRadius: '8px',
+                  px: 2,
+                  py: 1,
+                  '&:hover': {
+                    backgroundColor: '#3B82F6',
+                  }
+                }}
+              >
+                Logout
+              </Button>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>

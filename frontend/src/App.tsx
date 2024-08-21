@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Home, Signup, Login, NotFound, UserProfile } from './pages';
-import { NavBar } from './components';
+import { NavBar, PrivateRoute } from './components';
 
 function App() {
   return (
@@ -11,7 +11,9 @@ function App() {
           <Route path='/' element={<Home />}/>
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/profile' element={<UserProfile />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/profile/:userId' element={<UserProfile />} />
+          </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
     </div>

@@ -66,4 +66,11 @@ export class Auth {
             throw err;
         }
     }
+
+    public async logout() {
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('currentUser')
+    }
+
+    
 }

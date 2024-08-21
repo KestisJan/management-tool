@@ -19,13 +19,13 @@ const UserProfileComponent: React.FC = () => {
     const [avatar, setAvatar] = useState<File | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-    useEffect(() => {
-        dispatch(fetchUserProfile());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchUserProfile());
+    // }, [dispatch]);
 
-    const handleUpdate = async (updatedProfile: UserProfile) => {
-        await dispatch(updateUserProfile(updatedProfile));
-    }
+    // const handleUpdate = async (updatedProfile: UserProfile) => {
+    //     await dispatch(updateUserProfile(updatedProfile));
+    // }
 
     const navigate = useNavigate();
 

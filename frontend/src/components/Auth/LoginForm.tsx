@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { Auth } from '../../services/auth.services';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -37,6 +39,8 @@ const LoginForm: React.FC = () => {
         try {
             const auth = new Auth();
             const response = await auth.login(formData);
+            
+            navigate('/');
         } catch (err: any) {
             console.error('Login failed: ', err);
             setError('Login failed. Please try again.');
