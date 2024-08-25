@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log; 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -34,7 +35,7 @@ class AuthController extends Controller
 
         $data = $validator->validated();
 
-        $password = bcrypt($data['password']);
+        $password = Hash::make($data['password']);
 
         try {
             $user = User::create([
@@ -91,7 +92,12 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken(JWTAuth::refresh());
+        try {
+            $token = JWTAuth::parseToken()->refresh();
+            return $this->respondWithToken($token);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Token refresh failed'], 401);
+        }
     }
 
     protected function respondWithToken($token, $statusCode = 200)

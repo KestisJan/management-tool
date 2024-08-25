@@ -1,4 +1,4 @@
-import { api, headerAPI } from '../configs/axios';
+import api from '../configs/axios';
 import { RegisterRequest, AuthResponse, LoginRequest } from '../types/auth';
 
 
@@ -6,8 +6,8 @@ export class Auth {
     
     public async register(userData: RegisterRequest): Promise<AuthResponse> {
         try {
-            const response = await api.post<AuthResponse>('/auth/register', userData, headerAPI);
-            console.log(response);
+            const response = await api.post<AuthResponse>('/auth/register', userData);
+            console.log('Auth Service:', response);
 
             if (response.status !== 201) {
                 console.error(`Registration failed with status code: ${response.status}`);
@@ -37,7 +37,7 @@ export class Auth {
 
     public async login(credentials: LoginRequest ): Promise<AuthResponse> {
         try {
-            const response = await api.post<AuthResponse>('/auth/login', credentials, headerAPI);
+            const response = await api.post<AuthResponse>('/auth/login', credentials);
 
             if (response.status !== 200) {
                 console.error(`Login failed with status code: ${response.status} `);
