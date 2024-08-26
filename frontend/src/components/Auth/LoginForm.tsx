@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { Auth } from '../../services/auth.services';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { login } from '../../features/auth/authThunk';
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -25,21 +28,19 @@ const LoginForm: React.FC = () => {
         setError(null);
 
         if (formData.email.length === 0) {
-            setError('Email cannot be empty!');  
+            setError('Email cannot be empty!');
             setLoading(false);
-            return
+            return;
         }
 
         if (formData.password.length === 0) {
             setError('Password cannot be empty!');
             setLoading(false);
-            return
+            return;
         }
 
         try {
-            const auth = new Auth();
-            const response = await auth.login(formData);
-            
+            await dispatch(login(formData)).unwrap();
             navigate('/');
         } catch (err: any) {
             console.error('Login failed: ', err);
