@@ -1,36 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserProfile } from '../../interfaces/User';
-import { UserService } from '../../services/userProfile.services';
+import { fetchUserProfile, updateUserProfile } from './userProfileThunks';
+import { RootState } from '../../store/store';
 
 interface UserProfileState {
     profile: UserProfile | null;
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    loading: boolean;
     error: string | null;
 }
 
-
 const initialState: UserProfileState = {
     profile: null,
-    status: 'idle',
+    loading: false,
     error: null,
 };
-
-export const fetchUserProfile = createAsyncThunk(
-    'userProfile/fetchUserProfile',
-    async (userId: number) => {
-        const userService = new UserService();
-        return await userService.getUserProfile(userId);
-    }
-);
-
-export const updateUserProfile = createAsyncThunk<UserProfile, { userId: number; userProfile: UserProfile }>(
-    'userProfile/updateUserProfile',
-    async ({ userId, userProfile }) => {
-        const userService = new UserService();
-        return await userService.updateUserProfile(userId, userProfile);
-    }
-);
-
 
 const userProfileSlice = createSlice({
     name: 'userProfile',
@@ -39,29 +22,36 @@ const userProfileSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchUserProfile.pending, (state) => {
-                state.status = 'loading';
+                state.loading = true;
+                state.error = null;
             })
-            .addCase(fetchUserProfile.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+            .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<UserProfile>) => {
                 state.profile = action.payload;
+                state.loading = false;
+                state.error = null;
             })
-            .addCase(fetchUserProfile.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || 'Failed to fetch profile';
+            .addCase(fetchUserProfile.rejected, ( state, action ) => {
+                state.loading = false;
+                state.error = action.payload as string || 'Failed to fetch user profile';
             })
             .addCase(updateUserProfile.pending, (state) => {
-                state.status = 'loading';
+                state.loading = true;
+                state.error = null;
             })
-            .addCase(updateUserProfile.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+            .addCase(updateUserProfile.fulfilled, ( state, action: PayloadAction<UserProfile>) => {
                 state.profile = action.payload;
+                state.loading = false;
+                state.error = null;
             })
             .addCase(updateUserProfile.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || 'Failed to update profile';
+                state.loading = false;
+                state.error = action.payload as string || 'Failed to update user profile';
             });
     },
-});
-
+})
 
 export default userProfileSlice.reducer;
+
+export const selectUserProfile = (state: RootState) => state.userProfile.profile;
+export const selectUserProfileLoading = (state: RootState) => state.userProfile.loading;
+export const selectUserProfileError = (state: RootState) => state.userProfile.error;

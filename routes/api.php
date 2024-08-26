@@ -19,7 +19,5 @@ Route::group([
 });
 
 Route::middleware('auth:api')->prefix('profile')->group(function () {
-    Route::get('/', [UserProfileController::class, 'show'])->name('profile.show');
-    Route::put('/', [UserProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/', [UserProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/', [UserProfileController::class, 'getUserByToken'])->name('profile.show');
 });

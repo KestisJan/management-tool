@@ -6,28 +6,36 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { RootState, AppDispatch } from "../../store/store";
-import { fetchUserProfile, updateUserProfile } from "../../features/userProfile/userProfileSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { UserProfile } from "../../interfaces/User";
+import { fetchUserProfile, updateUserProfile } from "../../features/userProfile/userProfileThunks";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { selectUserId } from "../../features/auth/authSlice";
 
 const UserProfileComponent: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const profile = useSelector((state: RootState) => state.userProfile.profile);
-    const status = useSelector((state: RootState) => state.userProfile.status);
-    const error = useSelector((state: RootState) => state.userProfile.error);
-
+    const dispatch = useAppDispatch(); 
+    const navigate = useNavigate();
+    const userId = useSelector(selectUserId);
     const [avatar, setAvatar] = useState<File | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const profile = useSelector((state: RootState) => state.userProfile.profile);
+    const loading = useSelector((state: RootState) => state.userProfile.loading);
+    const error = useSelector((state: RootState) => state.userProfile.error);
 
-    // useEffect(() => {
-    //     dispatch(fetchUserProfile());
-    // }, [dispatch]);
+    console.log(profile)
+    useEffect(() => {
+        dispatch(fetchUserProfile())
+            .unwrap()
+            .then((profile) => {
+                setUserProfile(profile);
+            })
+            .catch((err: any) => {
+                console.error('Failed to fetch user profile:', err);
+            })
+    }, [dispatch]);
 
-    // const handleUpdate = async (updatedProfile: UserProfile) => {
-    //     await dispatch(updateUserProfile(updatedProfile));
-    // }
-
-    const navigate = useNavigate();
+  
 
     const handleBack = () => {
         navigate(-1);

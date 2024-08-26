@@ -6,18 +6,30 @@ use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class UserProfileController extends Controller
 {
-    public function show()
+    public function getUserByToken(Request $request)
     {
-        $userProfile = Auth::user()->profile;
+        $token = $request->bearerToken();
 
-        if ($userProfile) {
-            return response()->json($userProfile, 200);
-        } else {
-            return response()->json(['error' => 'Profile not found'], 404);
+        if (!$token) {
+            return response()->json(['error' => 'Token not provided'], 400);
+        }
+
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+
+            if ($user) {
+                return response()->json($user, 200);
+            } else {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Invalid token'], 401);
         }
     }
 
@@ -43,20 +55,5 @@ class UserProfileController extends Controller
             return response()->json(['error' => 'Profile not found'], 404);
         }
     }
-
-
-    public function destroy()
-    {
-        $userProfile = Auth::user()->profile;
-
-        if ($userProfile) {
-            $userProfile->delete();
-            return response()->json(['message' => 'Profile deleted successfully'], 200);
-        } else {
-            return response()->json(['error' => 'Profile not found'], 404);
-        }
-    }
-
-
 
 }

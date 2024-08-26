@@ -12,7 +12,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route element={<PrivateRoute />}>
-            <Route path='/profile/:userId' element={<UserProfile />} />
+            <Route path='/profile' element={<UserProfile />} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>

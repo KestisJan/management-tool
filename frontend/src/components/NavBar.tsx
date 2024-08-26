@@ -9,7 +9,6 @@ import { useAppDispatch } from './hooks/useAppDispatch';
 
 const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const userId = useSelector((state: RootState) => state.auth.user?.id);
   const isAuthenticated = useSelector((state: RootState) => selectIsAuthenticated(state));
 
   const handleLogout = () => {
@@ -81,7 +80,7 @@ const Navbar: React.FC = () => {
                 <Button
                   color='inherit'
                   component={Link}
-                  to={`/profile/${userId}`}
+                  to="/profile"
                 >
                   Profile
                 </Button>

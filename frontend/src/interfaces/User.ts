@@ -5,6 +5,7 @@ export interface User {
     email: string;
     profile_picture?: string;
     role?: string;
+    birthday?: Date;
     created_at?: string;
     updated_at?: string;
 }
@@ -13,4 +14,5 @@ export interface UserProfile extends User {
     phone: string;
     city: string;
     address: string;
+    birthday: Date;
 }

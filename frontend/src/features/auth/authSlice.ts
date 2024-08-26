@@ -13,7 +13,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     accessToken: localStorage.getItem('authToken'),
-    user: JSON.parse(localStorage.getItem('currentUser') || 'null') || null,
+    user: null,
     status: 'idle',
     error: null,
 };
@@ -34,7 +34,6 @@ const authSlice = createSlice({
                 state.status = 'succeeded';
                 state.error = null;
                 localStorage.setItem('authToken', action.payload.access_token);
-                localStorage.setItem('currentUser', JSON.stringify(action.payload.user));
 
             })
             .addCase(login.rejected, (state, action) => {
@@ -50,7 +49,6 @@ const authSlice = createSlice({
                 state.status = 'succeeded';
                 state.error = null;
                 localStorage.removeItem('authToken');
-                localStorage.removeItem('currentUser');
 
             })
             .addCase(logout.rejected, (state, action) => {
@@ -63,3 +61,4 @@ const authSlice = createSlice({
 export default authSlice.reducer;
 
 export const selectIsAuthenticated = (state: RootState) => !!state.auth.accessToken;
+export const selectUserId = (state: RootState) => state.auth.user?.id;
